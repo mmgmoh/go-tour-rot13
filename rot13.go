@@ -6,31 +6,31 @@ import (
 	"strings"
 )
 
-const lowerA byte = 97
-const lowerZ byte = 122
+const lowercaseA byte = 97
+const lowercaseZ byte = 122
 
-const upperA byte = 65
-const upperZ byte = 90
+const uppercaseA byte = 65
+const uppercaseZ byte = 90
 
 type rot13Reader struct {
 	r io.Reader
 }
 
 func (reader *rot13Reader) Read(p []byte) (n int, err error) {
-	bytesWritten, err := reader.r.Read(p)
+	bytesToWrite, err := reader.r.Read(p)
 
 	if err != nil {
-		return bytesWritten, err
+		return bytesToWrite, err
 	}
 
 	for i := 0; i < len(p); i++ {
 		var b byte = p[i]
 		var min byte
 
-		if b <= upperZ {
-			min = upperA
+		if b <= uppercaseZ {
+			min = uppercaseA
 		} else {
-			min = lowerA
+			min = lowercaseA
 		}
 
 		valueAdd := (b - min + 13) % 26
@@ -38,7 +38,7 @@ func (reader *rot13Reader) Read(p []byte) (n int, err error) {
 		p[i] = min + valueAdd
 	}
 
-	return bytesWritten, nil
+	return bytesToWrite, nil
 }
 
 func main() {
